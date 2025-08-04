@@ -1,5 +1,6 @@
 # TASK_1
 DATA PREPROCESSING
+
 Removed missing values and duplicate rows to ensure data quality.
 
 Standardized column names to lowercase with underscores (e.g., annual_income_(k$)).
