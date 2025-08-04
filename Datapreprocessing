@@ -1,0 +1,53 @@
+
+import pandas as pd
+
+# Load the dataset
+df = pd.read_csv("C:/Users/User/Downloads/Mall_Customers.csv")
+
+# Display the first few rows
+print("Initial Dataset:")
+print(df.head())
+
+# -------------------- 1. HANDLE MISSING VALUES --------------------
+print("\nMissing Values Before Handling:")
+print(df.isnull().sum())
+
+# Optionally: Drop rows with any missing values
+df = df.dropna()
+
+# -------------------- 2. REMOVE DUPLICATES --------------------
+print(f"\nDuplicates Found: {df.duplicated().sum()}")
+df = df.drop_duplicates()
+
+# -------------------- 3. CLEAN COLUMN NAMES --------------------
+# Make column headers lowercase and replace spaces with underscores
+df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
+
+# -------------------- 4. STANDARDIZE TEXT VALUES --------------------
+# Example: Standardize gender column values (if present)
+if 'gender' in df.columns:
+    df['gender'] = df['gender'].str.strip().str.lower()
+
+# -------------------- 5. FIX DATA TYPES --------------------
+# Convert age to integer (if present)
+if 'age' in df.columns:
+    df['age'] = df['age'].astype(int)
+
+# Convert annual income to numeric (remove commas, symbols if needed)
+if 'annual_income_(k$)' in df.columns:
+    df['annual_income_(k$)'] = pd.to_numeric(df['annual_income_(k$)'], errors='coerce')
+
+# -------------------- 6. ADDITIONAL CLEANING --------------------
+# Strip whitespace and lowercase text fields
+for col in df.select_dtypes(include='object').columns:
+    df[col] = df[col].str.strip().str.lower()
+
+# -------------------- 7. FINAL CHECK --------------------
+print("\nFinal Column Data Types:")
+print(df.dtypes)
+
+print("\nCleaned Dataset Sample:")
+print(df.head())
+
+# Optionally save to a new CSV
+df.to_csv("Cleaned_Mall_Customers.csv", index=False)
